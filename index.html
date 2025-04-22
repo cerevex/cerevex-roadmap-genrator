@@ -1,75 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Cerevex AI - Mission Roadmap Generator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 40px;
-      max-width: 700px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-      color: #0d47a1;
-    }
-    textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 16px;
-    }
-    button {
-      background-color: #2196f3;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    #output {
-      background: white;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 5px;
-      white-space: pre-wrap;
-      border: 1px solid #ccc;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Cerevex AI Roadmap Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background-color: #f4f4f4;
+            color: #333;
+            max-width: 700px;
+            margin: auto;
+        }
+        h2 {
+            color: #007bff;
+        }
+        textarea, button {
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #1890ff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #40a9ff;
+        }
+        #output {
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-  <h1>🚀 Cerevex AI Roadmap Generator</h1>
-  <label for="mission">Enter your mission:</label>
-  <textarea id="mission" rows="4" placeholder="E.g. I want to launch a YouTube channel about AI..."></textarea>
-  <button onclick="generateRoadmap()">Generate Roadmap</button>
 
-  <div id="output"></div>
+    <h2>🚀 Cerevex AI Roadmap Generator</h2>
+    <label for="mission">Enter your mission:</label>
+    <textarea id="mission" rows="5" placeholder="e.g., I want to become a pilot"></textarea>
+    <button onclick="generateRoadmap()">Generate Roadmap</button>
 
-  <script>
-    async function generateRoadmap() {
-      const mission = document.getElementById("mission").value;
-      const outputDiv = document.getElementById("output");
-      outputDiv.innerText = "Generating roadmap... Please wait...";
+    <div id="output"></div>
 
-      try {
-        const response = await fetch("https://roadmap-ai.onrender.com", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ mission: mission })
-        });
+    <script>
+        async function generateRoadmap() {
+            const mission = document.getElementById("mission").value;
+            const output = document.getElementById("output");
+            output.textContent = "⏳ Generating roadmap...";
 
-        const data = await response.json();
-        if (data.roadmap) {
-          outputDiv.innerText = data.roadmap;
-        } else {
-          outputDiv.innerText = "Error: " + data.error;
+            try {
+                const response = await fetch("https://roadmap-ai.onrender.com/generate_roadmap", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ mission })
+                });
+
+                const data = await response.json();
+                if (data.roadmap) {
+                    output.textContent = data.roadmap;
+                } else {
+                    output.textContent = "❌ Error: " + JSON.stringify(data);
+                }
+            } catch (error) {
+                output.textContent = "⚠️ Something went wrong:\n" + error;
+            }
         }
-      } catch (error) {
-        outputDiv.innerText = "Something went wrong: " + error;
-      }
-    }
-  </script>
+    </script>
+
 </body>
 </html>
